@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>状态</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content >
+  <ion-card>
+    <ion-item >
+      <div class="circle">
+      </div>
+      <div class="circle-content">
+        <ion-icon name="pulse" color="light"></ion-icon>
+        <div *ngIf="isFetch==false">
+          <h2>收缩压:{{currentData && currentData.systolic}}/mmHg</h2>
+          <h2>舒张压:{{currentData && currentData.diastolic}}/mmHg</h2>
+          <h2>心率:{{currentData && currentData.rate}}/bpm</h2>
+        </div>
+      </div>
+      <h2 *ngIf="isFetch==true">同步数据...</h2>
+    </ion-item>
+  </ion-card>
+  <ion-grid *ngIf="isFetch==true">
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col text-center>
+        <ion-spinner name="circles"></ion-spinner>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+  <div #container class="div-charts">
+    
+  </div>
+</ion-content>

@@ -1,0 +1,73 @@
+page-home {
+  .div-charts {
+    width:100%;
+    height:300px;
+  }
+  .card .item{
+    text-align: center;
+    background-color: #387ef5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .item .label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    h2 {
+      color: #fff;
+    }
+  }
+  .circle {
+    width: 20rem;
+    height: 20rem;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    text-align: center;
+    line-height: 100px;
+    position: relative;
+    animation: myrotate 5s forwards infinite linear;
+    -webkit-animation: myrotate 5s forwards infinite linear;
+    
+    &:before {
+      content: '';
+      display: block;
+      width: 8px;
+      height:8px;
+      background-color: #fff;
+      border-radius: 50%;
+      position: absolute;
+      top: 3rem;
+      left:17rem;
+    }
+    
+  }
+
+  .circle-content {
+    position: absolute;
+    top: 2rem;
+    div {
+      margin-top: 4rem;
+    }
+    h2 {
+      color: #fff;
+      font-size: 1.8rem;
+    }
+    .icon {
+      font-size: 50px;
+    }
+  }
+
+  @keyframes myrotate {
+      100% {
+          transform: rotate(-360deg);
+      }
+  }
+
+  @-webkit-keyframes myrotate {
+      100% {
+          -webkit-transform: rotate(-360deg);
+      }
+  }
+}

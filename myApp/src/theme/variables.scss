@@ -1,0 +1,166 @@
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/v2/theming/
+$font-path: "../assets/fonts";
+
+@import "ionic.globals";
+
+
+// Shared Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass variables found in Ionic's source scss files.
+// To view all the possible Ionic variables, see:
+// http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
+
+
+
+
+// Named Color Variables
+// --------------------------------------------------
+// Named colors makes it easy to reuse colors on various components.
+// It's highly recommended to change the default colors
+// to match your app's branding. Ionic uses a Sass map of
+// colors so you can add, rename and remove colors as needed.
+// The "primary" color is the only required color in the map.
+
+$colors: (
+  primary:    #387ef5,
+  secondary:  #32db64,
+  danger:     #f53d3d,
+  light:      #f4f4f4,
+  dark:       #222
+);
+
+
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+
+
+
+
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+
+
+
+
+// App Windows Variables
+// --------------------------------------------------
+// Windows only Sass variables can go here
+
+
+
+
+// App Theme
+// --------------------------------------------------
+// Ionic apps can have different themes applied, which can
+// then be future customized. This import comes last
+// so that the above variables are used and Ionic's
+// default are overridden.
+
+@import "ionic.theme.default";
+
+
+// Ionicons
+// --------------------------------------------------
+// The premium icon font for Ionic. For more info, please see:
+// http://ionicframework.com/docs/v2/ionicons/
+
+@import "ionic.ionicons";
+
+
+// Fonts
+// --------------------------------------------------
+
+@import "roboto";
+@import "noto-sans";
+
+
+
+// Change the toolbar background color
+$toolbar-md-background:                   color($colors, primary);
+
+// Change the color of the segment button text
+$toolbar-md-active-color:                 #fff;
+
+// Change the checkbox checkmark color
+$checkbox-md-icon-checkmark-color:        #fff;
+
+// Used to show the status bar for component demos
+$cordova-md-statusbar-padding:           29px;
+
+$list-md-border-color: #dedede;
+$list-md-header-min-height:	4.5rem;
+$list-md-header-border-top:	1px solid $list-md-border-color;
+$list-md-header-font-size:	1.4rem	;
+$list-md-header-color:	#757575;
+
+body, body:hover, body a, body button, body media-switch {
+  cursor: url('http://ionicframework.com/img/finger.png') 8 8, auto;
+}
+
+body ion-app {
+  overflow: visible;
+}
+
+ion-page {
+  display: flex;
+}
+
+ion-scroll {
+  width: 100%;
+  height: 100%;
+}
+
+body.has-scrollbar scroll-content {
+  margin-right: -15px;
+}
+
+body.has-scrollbar ion-menu scroll-content {
+  margin-right: 0;
+}
+
+scroll-content {
+  overflow-y: scroll;
+}
+
+.statusbar-img {
+  display: none;
+}
+
+
+.md {
+
+  // Android Status Bar
+  //---------------------------
+  .statusbar-img-md {
+    display: block !important;
+    position: absolute;
+    background-color: transparent;
+    top: 0px;
+    width: 100%;
+    height: auto;
+    z-index: 999;
+  }
+
+  .tabs-icon-text ion-title div.toolbar-title {
+    color: #fff !important;
+  }
+
+  .tabs-icon-text tabbar {
+    background-color: #7e60ff;
+
+    a {
+      color: #fff !important;
+    }
+  }
+
+  .tabs-icon-text tab-highlight {
+    color: #fff;
+    background-color: #fff;
+  }
+
+}
+

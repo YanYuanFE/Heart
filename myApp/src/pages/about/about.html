@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      连接
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list no-border>
+    <ion-list-header>
+      Device
+    </ion-list-header>
+    <ion-item>
+      <ion-icon name="bluetooth" item-left color="primary"></ion-icon>
+      <ion-label>扫描</ion-label>
+      <ion-toggle color="primary" (ionChange)="startScan(20)"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="eye" item-left color="secondary"></ion-icon>
+      <ion-label>开放检测</ion-label>
+      <ion-toggle color="primary" checked="true" ></ion-toggle>
+    </ion-item>
+  </ion-list>
+
+  <ion-list no-border>
+    <ion-item-group>
+      <ion-item-divider color="light">已配对</ion-item-divider>
+      <ion-item  *ngFor="let device of listDevices"  (click)="connectToDevice(device.address)">
+        <h2>{{device.name}}</h2>
+        <p>{{device.id}}<br/></p>
+      </ion-item>
+    </ion-item-group>
+    
+    
+  </ion-list>
+
+  <ion-list no-border>
+    <ion-item-group>
+      <ion-item-divider color="light">未配对</ion-item-divider>
+        <ion-item *ngFor="let device of discoverDevices"  (click)="connectToDevice(device.address)">
+        <h2>{{device.name}}</h2>
+        <p>{{device.id}}<br/></p>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
+  <ion-grid >
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col text-center>
+        <ion-spinner  *ngIf="isScanning==true" name="circles"></ion-spinner>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

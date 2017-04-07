@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 
-import { NavController } from 'ionic-angular';
+import { NavController, Events } from 'ionic-angular';
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
+
+import { HomePage } from '../home/home';
 
 @Injectable()
 
@@ -18,7 +20,11 @@ export class AboutPage {
   discoverDevices: any;
   data: any;
   private isScanning = false;
-  constructor(public navCtrl: NavController, private ble: BLE, private bluetoothSerial: BluetoothSerial) {
+  constructor(
+    public navCtrl: NavController, 
+    public events: Events, 
+    private ble: BLE, 
+    private bluetoothSerial: BluetoothSerial) {
     this.devices = [];
     this.listDevices = [];
     this.discoverDevices = [];
@@ -62,14 +68,27 @@ export class AboutPage {
 
   }
 
-  connectToDevice(deviceAddress) {
+  connectToDevice(device) {
     console.log("Connect To Device");
-    console.log(JSON.stringify(deviceAddress));
-    this.bluetoothSerial.connect(deviceAddress);
-    this.bluetoothSerial.read().then((result) => {
-      this.data = result;
-      console.log(JSON.stringify(result));
-    })
+    console.log(JSON.stringify(device));
+    this.bluetoothSerial.connect(device.address).subscribe(
+      () => {
+          this.bluetoothSerial.read().then((result) => {
+          this.data = result;
+          this.events.publish('data:readed', result);
+          console.log(JSON.stringify(result));
+        })
+      },
+      err => {
+          console.log(err);
+      },
+      () => {
+        this.events.publish('user:binded', device);
+        this.navCtrl.push(HomePage, {
+          data: this.data
+        });
+      }
+    );
   }
 
 

@@ -1,8 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 import { Platform } from 'ionic-angular';
 import { BLE } from '@ionic-native/ble';
+import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 
 import { DataService } from '../service/dataService';
 
@@ -21,7 +22,14 @@ export class HomePage {
   datas: Array<any>;
   currentData: Object;
 
-  constructor(public navCtrl: NavController,private platform: Platform, private ble: BLE, private dataService: DataService) {
+  constructor(
+    public navCtrl: NavController, 
+    public params: NavParams, 
+    public events: Events, 
+    private platform: Platform, 
+    private ble: BLE, 
+    private dataService: DataService,
+    private bluetoothSerial: BluetoothSerial) {
     platform.ready().then(() => {
       this.isFetch = true;
 
@@ -51,9 +59,14 @@ export class HomePage {
     
   }
 
+  
+
 
 
   ionViewDidEnter() {
+    this.events.subscribe('data:readed', (result) => {
+      this.currentData = result;
+    });
     let ctx = this.container.nativeElement;
     this.chart = echarts.init(ctx);
     this.chart.setOption({

@@ -26,9 +26,9 @@
   <ion-list no-border>
     <ion-item-group>
       <ion-item-divider color="light">已配对</ion-item-divider>
-      <ion-item  *ngFor="let device of listDevices"  (click)="connectToDevice(device.address)">
-        <h2>{{device.name}}</h2>
-        <p>{{device.id}}<br/></p>
+      <ion-item  *ngFor="let device of listDevices"  (click)="connectToDevice(device)">
+        <ion-icon name="body" item-left></ion-icon>
+        <h2>{{device.name || device.id}}</h2>
       </ion-item>
     </ion-item-group>
     
@@ -39,8 +39,8 @@
     <ion-item-group>
       <ion-item-divider color="light">未配对</ion-item-divider>
         <ion-item *ngFor="let device of discoverDevices"  (click)="connectToDevice(device.address)">
-        <h2>{{device.name}}</h2>
-        <p>{{device.id}}<br/></p>
+        <ion-icon name="buffer" item-left></ion-icon>
+        <h2>{{device.name || device.id}}</h2>
       </ion-item>
     </ion-item-group>
   </ion-list>

@@ -19,6 +19,8 @@ export class AboutPage {
   listDevices: any;
   discoverDevices: any;
   data: any;
+  status: any;
+  mock: any;
   private isScanning = false;
   constructor(
     public navCtrl: NavController, 
@@ -29,6 +31,8 @@ export class AboutPage {
     this.listDevices = [];
     this.discoverDevices = [];
     this.data = {};
+    this.status = '未连接';
+    this.mock = '';
   }
 
   startScan(seconds, callback) {
@@ -64,23 +68,27 @@ export class AboutPage {
         console.log(JSON.stringify(this.devices));
         this.isScanning = false;
       });
-    },3000);
+    },8000);
 
   }
 
   connectToDevice(device) {
     console.log("Connect To Device");
-    console.log(JSON.stringify(device));
-    this.bluetoothSerial.connect(device.address).subscribe(
-      () => {
+    console.log(device);
+    this.bluetoothSerial.connect(device).subscribe(
+      (res) => {
+          this.status = '连接成功';
+          this.mock = res;
+          console.log(res)
           this.bluetoothSerial.read().then((result) => {
-          this.data = result;
-          this.events.publish('data:readed', result);
-          console.log(JSON.stringify(result));
-        })
+            this.mock = result;
+            this.data = result;
+            this.events.publish('data:readed', result);
+            console.log(JSON.stringify(result));
+          })
       },
       err => {
-          console.log(err);
+          alert(err);
       },
       () => {
         this.events.publish('user:binded', device);

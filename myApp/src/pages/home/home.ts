@@ -30,13 +30,15 @@ export class HomePage {
     private ble: BLE, 
     private dataService: DataService,
     private bluetoothSerial: BluetoothSerial) {
+    this.datas = [];
     platform.ready().then(() => {
       this.isFetch = true;
-
+    
       this.dataService.getAlldata().subscribe(
           data => {
+
               this.datas = data; 
-              console.log(data);
+              console.log(JSON.stringify(data));
           },
           err => {
               console.log(err);
@@ -65,7 +67,7 @@ export class HomePage {
 
   ionViewDidEnter() {
     this.events.subscribe('data:readed', (result) => {
-      this.currentData = result;
+      this.currentData = JSON.stringify(result);
     });
     let ctx = this.container.nativeElement;
     this.chart = echarts.init(ctx);

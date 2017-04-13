@@ -8,7 +8,7 @@ export class DataService {
     baseUrl:String;
   
     constructor(private http:Http) {
-        this.baseUrl = 'http://10.8.12.129:3000';
+        this.baseUrl = 'http://123.206.14.146:3000';
          
     }
   

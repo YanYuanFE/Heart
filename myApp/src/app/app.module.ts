@@ -11,6 +11,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Geolocation } from '@ionic-native/geolocation';
 import { BLE } from '@ionic-native/ble';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
+import { IonicStorageModule } from '@ionic/storage';
 
 import { MomentModule } from 'angular2-moment';
 
@@ -24,7 +25,8 @@ import { MomentModule } from 'angular2-moment';
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    MomentModule
+    MomentModule,
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [

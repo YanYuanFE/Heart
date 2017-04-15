@@ -39,8 +39,8 @@
   <ion-list no-border>
     <ion-item-group>
       <ion-item-divider color="light">未配对</ion-item-divider>
-        <ion-item *ngFor="let device of discoverDevices"  (click)="connectToDevice(device.address)">
-          <ion-icon name="buffer" item-left></ion-icon>
+        <ion-item *ngFor="let device of discoverDevices"  (click)="connectToDevice(device)">
+          <ion-icon name="heart-outline" item-left></ion-icon>
           <h2>{{device.name || device.id}}</h2>
         </ion-item>
     </ion-item-group>

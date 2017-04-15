@@ -16,7 +16,8 @@ var heartSchema = new Schema({
     systolic: Number,//收缩压
     diastolic: Number,//舒张压
     rate: Number,//心率
-    time: Date
+    time: Date,
+    user: String,
 });
 
 const HeartModel = mongoose.model('Heart', heartSchema);

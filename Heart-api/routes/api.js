@@ -12,7 +12,8 @@ router.get('/update', function (req, res) {
         systolic:129,
         diastolic:91,
         rate:134,
-        time:'2017-3-1'
+        time:'2017-3-1',
+        user:'',
     });
 
     newdata.save(function (err, result) {
@@ -51,12 +52,25 @@ router.get('/getCurrent',function (req,res) {
     }).sort({'time':1});
 });
 
+router.post('/device', function (req, res) {
+    var newdevice = Heart({
+        user: req.body.user,
+    });
+
+    newdevice.save(function (err,result) {
+        if(err) res.send(err);
+
+        res.send(result);
+    })
+});
+
 router.post('/update', function (req, res, next) {
     var newdata = Heart({
         systolic:req.body.systolic,
         diastolic:req.body.diastolic,
         rate:req.body.rate,
-        time:req.body.time
+        time:req.body.time,
+        user:req.body.user,
     });
 
     newdata.save(function (err, result) {

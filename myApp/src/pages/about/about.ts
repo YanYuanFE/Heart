@@ -5,9 +5,8 @@ import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import { Storage } from '@ionic/storage';
-
-import { DataService } from '../service/dataService';
 import { HomePage } from '../home/home';
+import { DataService } from '../service/dataService';
 
 @Injectable()
 
@@ -25,6 +24,7 @@ export class AboutPage {
   status: any;
   mock: any;
   user: any;
+  index: any;
   private isScanning = false;
   constructor(
     private storage: Storage,
@@ -37,7 +37,8 @@ export class AboutPage {
     this.devices = [];
     this.listDevices = [];
     this.discoverDevices = [];
-    this.data = {};
+    this.data = [];
+    this.index = 0;
     this.status = '未连接';
     this.mock = '';
     this.user = '';
@@ -45,7 +46,6 @@ export class AboutPage {
        storage.get('device').then((val) => {
          this.user = val;
          alert(val);
-         if(val) this.connectToDevice(val);
        })
      });
   }
@@ -93,6 +93,10 @@ export class AboutPage {
     },8000);
 
   }
+  
+  bytesToString(buffer) {
+    return String.fromCharCode.apply(null, new Uint8Array(buffer));
+  }
 
   connectToDevice(device) {
     console.log("Connect To Device:", device);
@@ -101,20 +105,26 @@ export class AboutPage {
       (res) => {
           this.status = '连接成功';
           this.storage.ready().then(() => { this.storage.set('device', device.address); })
-          this.dataService.postData(JSON.stringify({user:device.address}));
-          this.mock = res;
-          this.bluetoothSerial.read().then((result) => {
-            alert(result);
-            this.mock = result;
-            this.data = result;
-            this.events.publish('data:readed', result);
-            console.log(JSON.stringify(result));
-          })
+          this.events.publish('user:binded', device);
+          this.bluetoothSerial.subscribe('\n').subscribe((data) => {
+            this.mock = data;
+            this.data[this.index++] = data;
+            console.log(data);
+          });
+          this.dataService.postData(
+            JSON.stringify({
+              systolic: this.data[0],
+              diastolic: this.data[1],
+              rate: this.data[2],
+              time: this.data[3],
+              user:device.address
+            }));
       },
       err => {
-          alert(err);
+          console.log(err);
       },
       () => {
+        console.log("completed");
         this.events.publish('user:binded', device);
         this.navCtrl.push(HomePage, {
           data: this.data

@@ -5,8 +5,9 @@ import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import { Storage } from '@ionic/storage';
-import { HomePage } from '../home/home';
 import { DataService } from '../service/dataService';
+
+import {Observable} from 'rxjs/Rx';
 
 @Injectable()
 
@@ -25,6 +26,8 @@ export class AboutPage {
   mock: any;
   user: any;
   index: any;
+  input: any;
+  currentData:any;
   private isScanning = false;
   constructor(
     private storage: Storage,
@@ -42,10 +45,10 @@ export class AboutPage {
     this.status = '未连接';
     this.mock = '';
     this.user = '';
+    this.currentData = {};
     storage.ready().then(() => {
        storage.get('device').then((val) => {
          this.user = val;
-         alert(val);
        })
      });
   }
@@ -93,10 +96,6 @@ export class AboutPage {
     },8000);
 
   }
-  
-  bytesToString(buffer) {
-    return String.fromCharCode.apply(null, new Uint8Array(buffer));
-  }
 
   connectToDevice(device) {
     console.log("Connect To Device:", device);
@@ -108,29 +107,44 @@ export class AboutPage {
           this.events.publish('user:binded', device);
           this.bluetoothSerial.subscribe('\n').subscribe((data) => {
             this.mock = data;
-            this.data[this.index++] = data;
-            console.log(data);
+            console.log(JSON.stringify(data));
+            this.data[this.index++] = data.toString().replace(/\n/,'');
+            if(this.index > 2) {
+                console.log(this.data);
+                let heart = {
+                    systolic: this.data[0],
+                    diastolic: this.data[1],
+                    rate: this.data[2],
+                    time: new Date(),
+                    user:device.address
+                  }
+                this.dataService.postData(heart).subscribe(
+                  data => {
+                    console.log(data);
+                    return true;
+                  },
+                  error => {
+                    return Observable.throw(error);
+                  }
+                );
+                Object.assign(this.currentData,heart);
+                console.log(this.currentData);
+                this.events.publish('data:readed', this.currentData);
+            }
           });
-          this.dataService.postData(
-            JSON.stringify({
-              systolic: this.data[0],
-              diastolic: this.data[1],
-              rate: this.data[2],
-              time: this.data[3],
-              user:device.address
-            }));
+          return true;
+          
       },
-      err => {
-          console.log(err);
-      },
-      () => {
-        console.log("completed");
-        this.events.publish('user:binded', device);
-        this.navCtrl.push(HomePage, {
-          data: this.data
-        });
+      (err) => {
+          console.log(JSON.stringify(err));
       }
     );
+  }
+
+  send() {
+    console.log(this.input);
+    this.bluetoothSerial.write(this.input).then(
+      (res) => alert(res), (err) => alert(err));
   }
 
 

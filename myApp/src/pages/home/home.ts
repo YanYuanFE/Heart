@@ -6,7 +6,6 @@ import { BLE } from '@ionic-native/ble';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 
 import { DataService } from '../service/dataService';
-
 declare var echarts;
 declare var moment;
 
@@ -32,19 +31,6 @@ export class HomePage {
     private bluetoothSerial: BluetoothSerial) {
     this.datas = [];
     platform.ready().then(() => {
-      this.isFetch = true;
-    
-      this.dataService.getAlldata().subscribe(
-          data => {
-
-              this.datas = data; 
-              console.log(JSON.stringify(data));
-          },
-          err => {
-              console.log(err);
-          }
-      );
-
       this.dataService.getCurrentData().subscribe(
           data => {
               this.currentData = data; 
@@ -53,7 +39,9 @@ export class HomePage {
           err => {
               console.log(err);
           },
-          () => this.isFetch = false
+          () => {
+            this.isFetch = false;
+          }
       );
      
     });
@@ -67,67 +55,82 @@ export class HomePage {
 
   ionViewDidEnter() {
     this.events.subscribe('data:readed', (result) => {
-      this.currentData = JSON.stringify(result);
+      this.currentData = result;
+      console.log(JSON.stringify(this.currentData));
     });
-    let ctx = this.container.nativeElement;
-    this.chart = echarts.init(ctx);
-    this.chart.setOption({
-      tooltip : {
-        trigger: 'axis',
-        axisPointer : {
-          type : 'shadow'
-        }
-      },
-      legend: {
-        data:['收缩压','舒张压','心率']
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        width: '100%',
-        height: '100%',
-        containLabel: true
-      },
-      xAxis : [
-        {
-          type : 'category',
-          data : this.datas.map((item) => moment(item.time).format('YYYY-MM-DD HH:mm')),
-          axisTick: {
-            alignWithLabel: true
-          },
-          nameTextStyle: {
-            color: '#387ef5',
-            fontStyle: 'italic',
-          }
-        }
-      ],
-      yAxis : [
-        {
-          type : 'value',
-          nameTextStyle: {
-            color: '#387ef5',
-            fontStyle: 'italic',
-          }
-        }
-      ],
-      series : [
-        {
-          name:'收缩压',
-          type:'line',
-          data:this.datas.map((item) => item.systolic)
-        },{
-          name:'舒张压',
-          type:'line',
-          data:this.datas.map((item) => item.diastolic)
-        },{
-          name:'心率',
-          type:'line',
-          data:this.datas.map((item) => item.rate)
-        }
-      ]
-    });
-  }
 
+    this.isFetch = true;
+    
+    this.dataService.getAlldata().subscribe(
+        data => {
+            this.datas = data.filter((item) => item.systolic); 
+            console.log(JSON.stringify(this.datas));
+            let ctx = this.container.nativeElement;
+            this.chart = echarts.init(ctx);
+            this.chart.setOption({
+              tooltip : {
+                trigger: 'axis',
+                axisPointer : {
+                  type : 'shadow'
+                }
+              },
+              legend: {
+                data:['收缩压','舒张压','心率']
+              },
+              grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                width: '100%',
+                height: '100%',
+                containLabel: true
+              },
+              xAxis : [
+                {
+                  type : 'category',
+                  data : data.map((item) => moment(item.time).format('YYYY-MM-DD HH:mm')),
+                  axisTick: {
+                    alignWithLabel: true
+                  },
+                  nameTextStyle: {
+                    color: '#387ef5',
+                    fontStyle: 'italic',
+                  }
+                }
+              ],
+              yAxis : [
+                {
+                  type : 'value',
+                  nameTextStyle: {
+                    color: '#387ef5',
+                    fontStyle: 'italic',
+                  }
+                }
+              ],
+              series : [
+                {
+                  name:'收缩压',
+                  type:'line',
+                  data:data.map((item) => item.systolic)
+                },{
+                  name:'舒张压',
+                  type:'line',
+                  data:data.map((item) => item.diastolic)
+                },{
+                  name:'心率',
+                  type:'line',
+                  data:data.map((item) => item.rate)
+                }
+              ]
+            });
+        },
+        err => {
+            console.log(err);
+        },
+        () => this.isFetch = false
+    );
+
+
+  }
 
 }

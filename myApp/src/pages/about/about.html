@@ -5,11 +5,10 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
-
 <ion-content>
   <ion-list no-border>
     <ion-list-header>
-      Device{{status}}
+      Device{{status}}{{user}}
     </ion-list-header>
     <ion-item>
       <ion-icon name="bluetooth" item-left color="primary"></ion-icon>
@@ -23,7 +22,6 @@
     </ion-item>
     <ion-item>接收数据:{{mock}}</ion-item>
   </ion-list>
-
   <ion-list no-border>
     <ion-item-group>
       <ion-item-divider color="light">已配对</ion-item-divider>
@@ -31,11 +29,8 @@
         <ion-icon name="body" item-left></ion-icon>
         <h2>{{device.name || device.id}}</h2>
       </ion-item>
-    </ion-item-group>
-    
-    
+    </ion-item-group> 
   </ion-list>
-
   <ion-list no-border>
     <ion-item-group>
       <ion-item-divider color="light">未配对</ion-item-divider>
@@ -55,3 +50,14 @@
     </ion-row>
   </ion-grid>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-input type="text" [(ngModel)] = "input"></ion-input>
+    <ion-buttons end>
+      <button ion-button icon-right color="royal" (click)="send()">
+        Send
+        <ion-icon name="send"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -16,6 +16,7 @@ export class ContactPage {
     events.subscribe('user:binded', (device) => {
       this.device = device.name || device.id;
     });
+    console.log(this.device);
     storage.get('device').then((val) => {
       this.device = '已绑定';
       this.user = val;
